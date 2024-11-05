@@ -1,9 +1,8 @@
-import java.util.Scanner;
 
+import java.util.Scanner;
 public class P128_ExcepcionRaiz {
     public static void main(String[] args) {
-        Scanner obj = new Scanner(System.in);
-        System.out.print("\033[H\033[2J");
+        Scanner obj = new Scanner(System.in); System.out.print("\033[H\033[2J");
 
         try {
             System.out.print("Introduce un número: ");
@@ -17,3 +16,5 @@ public class P128_ExcepcionRaiz {
     }
     
 }
+
+
