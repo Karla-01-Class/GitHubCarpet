@@ -224,3 +224,7 @@
 - P140_HolaMundoGUI
 - P141_AreaTrianguloGUI
 - P142_LeyDeNewtonGUI
+
+## PRACTICA 15
+- P143_PagaTrabjador
+- P144_Temperaturas
