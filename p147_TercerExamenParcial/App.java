@@ -1,158 +1,161 @@
 package p147_TercerExamenParcial;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.util.List;
 import java.util.ArrayList;
 
-public class App extends JFrame implements ActionListener {
-    
-    ArrayList<Jugador> datos = new ArrayList<>();
-    JMenuBar menuBar;
-    JMenu mnuArchivo, mnuAyuda;
-    JMenuItem smnAbrir, smnGuardar, smnSalir, smnAcercade;
-    JPanel pnlTabla, pnlDatos, pnlBotones;
-    JDialog jdlAcercaDe;
-    JLabel lblNombre, lblEdad, lblSexo, lblEstadoCivil, lblDescripcion, lblSalario;
-    JTextField txtNombre, txtEdad, txtSexo, txtEstadoCivil, txtDescripcion, txtSalario;
-    JScrollPane spane;
-    JTable table;
-    DefaultTableModel modelo;
-    JFileChooser fchArchivo;
-    JButton btnAgregar, btnGrabar;
+public class App extends JFrame {
+    private JTable tablaJugadores;
+    private DefaultTableModel modeloTabla;
+    private JTextField txtNombre, txtEdad, txtSexo, txtEstadoCivil, txtDescripcion, txtSalario;
+    private List<Jugador> listaJugadores;
 
     public App() {
-        super("Control de Jugadores de Futbol");
+        setTitle("Liga de Fútbol");
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Barra de menú
-        setLayout(new GridLayout(3, 1));
-
-        pnlTabla = new JPanel(new BorderLayout());
-        spane = new JScrollPane();
-        pnlTabla.add(spane);
-        table = new JTable();
-        modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new String[] {"Nombre", "Edad", "Sexo", "Estado Civil", "Descripción", "Salario"});
-        table.setModel(modelo);
-        spane.setViewportView(table);
-        add(pnlTabla);
-
-        pnlDatos = new JPanel(new GridLayout(6, 2));
-        lblNombre = new JLabel("Nombre: ");
-        txtNombre = new JTextField();
-        pnlDatos.add(lblNombre);
-        pnlDatos.add(txtNombre);
-        lblEdad = new JLabel("Edad: ");
-        txtEdad = new JTextField();
-        pnlDatos.add(lblEdad);
-        pnlDatos.add(txtEdad);
-        lblSexo = new JLabel("Sexo: ");
-        txtSexo = new JTextField();
-        pnlDatos.add(lblSexo);
-        pnlDatos.add(txtSexo);
-        lblEstadoCivil = new JLabel("Estado Civil: ");
-        txtEstadoCivil = new JTextField();
-        pnlDatos.add(lblEstadoCivil);
-        pnlDatos.add(txtEstadoCivil);
-        lblDescripcion = new JLabel("Descripción: ");
-        txtDescripcion = new JTextField();
-        pnlDatos.add(lblDescripcion);
-        pnlDatos.add(txtDescripcion);
-        lblSalario = new JLabel("Salario: ");
-        txtSalario = new JTextField();
-        pnlDatos.add(lblSalario);
-        pnlDatos.add(txtSalario);
-        add(pnlDatos);
-
-        pnlBotones = new JPanel();
-        btnAgregar = new JButton("Agregar");
-        btnAgregar.addActionListener(this);
-        pnlBotones.add(btnAgregar);
-        btnGrabar = new JButton("Grabar");
-        btnGrabar.addActionListener(this);
-        pnlBotones.add(btnGrabar);
-        add(pnlBotones);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == smnSalir) {
-            dispose();
-        } else if (e.getSource() == smnAbrir) {
-            abrirArchivo();
-        } else if (e.getSource() == smnGuardar) {
-            guardarArchivo();
-        } else if (e.getSource() == btnAgregar) {
-            agregarRegistro();
-        } else if (e.getSource() == btnGrabar) {
-            grabarRegistro();
-        }
-    }
-
-    public void cargarDatos() {
-        modelo.setRowCount(0); // Limpia la tabla
-        for (Jugador jugador : datos) {
-            modelo.addRow(new Object[] {jugador.getNombre(), jugador.getEdad(), jugador.getSexo(), jugador.getEstadoCivil(), jugador.getDescripcion(), jugador.getSalario()});
-        }
-    }
-
-    public void grabarRegistro() {
-        try {
-            String nombre = txtNombre.getText();
-            int edad = Integer.parseInt(txtEdad.getText());
-            char sexo = txtSexo.getText().charAt(0);
-            String estadoCivil = txtEstadoCivil.getText();
-            String descripcion = txtDescripcion.getText();
-            double salario = Double.parseDouble(txtSalario.getText());
-            datos.add(new Jugador(nombre, edad, sexo, estadoCivil, descripcion, salario));
-            cargarDatos(); // Llama a cargarDatos para actualizar la tabla
-            JOptionPane.showMessageDialog(this, "Registro agregado", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error en el ingreso de datos", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
+        // Panel de la tabla
+        modeloTabla = new DefaultTableModel(new Object[]{"Nombre", "Edad", "Sexo", "Estado Civil", "Descripción", "Salario"}, 0);
+        tablaJugadores = new JTable(modeloTabla);
+        tablaJugadores.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                mostrarJugadorSeleccionado();
+            }
+        });
+        JScrollPane scrollPane = new JScrollPane(tablaJugadores);
         
+        // Panel de datos
+        JPanel panelDatos = new JPanel(new GridLayout(6, 2));
+        panelDatos.add(new JLabel("Nombre:"));
+        txtNombre = new JTextField();
+        panelDatos.add(txtNombre);
 
-    public void abrirArchivo() {
-        fchArchivo = new JFileChooser();
-        fchArchivo.setFileFilter(new FileNameExtensionFilter("Archivos de datos (.dat)", "dat"));
-        int res = fchArchivo.showOpenDialog(null);
-        if (res == JFileChooser.APPROVE_OPTION) {
-            try {
-                datos = Utileria.desSeralizarDatos(fchArchivo.getSelectedFile().getPath());
-                cargarDatos();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error al abrir archivo", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+        panelDatos.add(new JLabel("Edad:"));
+        txtEdad = new JTextField();
+        panelDatos.add(txtEdad);
+
+        panelDatos.add(new JLabel("Sexo:"));
+        txtSexo = new JTextField();
+        panelDatos.add(txtSexo);
+
+        panelDatos.add(new JLabel("Estado Civil:"));
+        txtEstadoCivil = new JTextField();
+        panelDatos.add(txtEstadoCivil);
+
+        panelDatos.add(new JLabel("Descripción:"));
+        txtDescripcion = new JTextField();
+        panelDatos.add(txtDescripcion);
+
+        panelDatos.add(new JLabel("Salario:"));
+        txtSalario = new JTextField();
+        panelDatos.add(txtSalario);
+
+        // Panel de botones
+        JPanel panelBotones = new JPanel();
+        JButton btnAgregar = new JButton("Agregar");
+        btnAgregar.addActionListener(e -> agregarJugador());
+        JButton btnGuardar = new JButton("Guardar");
+        btnGuardar.addActionListener(e -> guardarJugadoresEnArchivo());
+        panelBotones.add(btnAgregar);
+        panelBotones.add(btnGuardar);
+
+        // Barra de menús
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menuArchivo = new JMenu("Archivo");
+        JMenuItem itemAbrir = new JMenuItem("Abrir");
+        itemAbrir.addActionListener(e -> cargarJugadoresDesdeArchivo());
+        JMenuItem itemGuardar = new JMenuItem("Guardar");
+        itemGuardar.addActionListener(e -> guardarJugadoresEnArchivo());
+        JMenuItem itemSalir = new JMenuItem("Salir");
+        itemSalir.addActionListener(e -> System.exit(0));
+        menuArchivo.add(itemAbrir);
+        menuArchivo.add(itemGuardar);
+        menuArchivo.add(itemSalir);
+
+        JMenu menuAyuda = new JMenu("Ayuda");
+        JMenuItem itemAcercaDe = new JMenuItem("Acerca de...");
+        itemAcercaDe.addActionListener(e -> JOptionPane.showMessageDialog(this, "Aplicación de Liga de Fútbol v1.0"));
+        menuAyuda.add(itemAcercaDe);
+
+        menuBar.add(menuArchivo);
+        menuBar.add(menuAyuda);
+        setJMenuBar(menuBar);
+
+        // Layout principal
+        setLayout(new BorderLayout());
+        add(scrollPane, BorderLayout.CENTER);
+        add(panelDatos, BorderLayout.NORTH);
+        add(panelBotones, BorderLayout.SOUTH);
+
+        // Inicializamos la lista de jugadores
+        listaJugadores = new ArrayList<>();
+    }
+
+    private void cargarJugadoresDesdeArchivo() {
+        listaJugadores = UtileriaJugador.cargarJugadores("jugadores.dat");
+        modeloTabla.setRowCount(0); // Limpiar la tabla
+        for (Jugador jugador : listaJugadores) {
+            modeloTabla.addRow(new Object[]{
+                jugador.getNombre(), jugador.getEdad(), jugador.getSexo(), jugador.getEstadoCivil(),
+                jugador.getDescripcion(), jugador.getSalario()
+            });
         }
     }
 
-    public void guardarArchivo() {
-        fchArchivo = new JFileChooser();
-        fchArchivo.setFileFilter(new FileNameExtensionFilter("Archivos de datos (.dat)", "dat"));
-        int res = fchArchivo.showSaveDialog(null);
-        if (res == JFileChooser.APPROVE_OPTION) {
-            try {
-                Utileria.serializarDatos(fchArchivo.getSelectedFile().getPath(), datos);
-                JOptionPane.showMessageDialog(this, "Archivo guardado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error al guardar archivo", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+    private void guardarJugadoresEnArchivo() {
+        UtileriaJugador.guardarJugadores(listaJugadores, "jugadores.dat");
+    }
+
+    private void agregarJugador() {
+        String nombre = txtNombre.getText();
+        int edad = Integer.parseInt(txtEdad.getText());
+        char sexo = txtSexo.getText().charAt(0);
+        String estadoCivil = txtEstadoCivil.getText();
+        String descripcion = txtDescripcion.getText();
+        double salario = Double.parseDouble(txtSalario.getText());
+
+        // Crear un nuevo jugador
+        Jugador jugador = new Jugador(nombre, edad, sexo, estadoCivil, descripcion, salario);
+        listaJugadores.add(jugador);
+
+        // Actualizar la tabla
+        modeloTabla.addRow(new Object[]{jugador.getNombre(), jugador.getEdad(), jugador.getSexo(),
+                jugador.getEstadoCivil(), jugador.getDescripcion(), jugador.getSalario()});
+
+        // Limpiar los campos de texto
+        limpiarCampos();
+    }
+
+    private void mostrarJugadorSeleccionado() {
+        int selectedRow = tablaJugadores.getSelectedRow();
+        if (selectedRow >= 0) {
+            txtNombre.setText((String) modeloTabla.getValueAt(selectedRow, 0));
+            txtEdad.setText(String.valueOf(modeloTabla.getValueAt(selectedRow, 1)));
+            txtSexo.setText(String.valueOf(modeloTabla.getValueAt(selectedRow, 2)));
+            txtEstadoCivil.setText((String) modeloTabla.getValueAt(selectedRow, 3));
+            txtDescripcion.setText((String) modeloTabla.getValueAt(selectedRow, 4));
+            txtSalario.setText(String.valueOf(modeloTabla.getValueAt(selectedRow, 5)));
         }
     }
 
-    public void agregarRegistro() {
+    private void limpiarCampos() {
         txtNombre.setText("");
         txtEdad.setText("");
         txtSexo.setText("");
         txtEstadoCivil.setText("");
         txtDescripcion.setText("");
         txtSalario.setText("");
-        btnGrabar.setEnabled(true);
     }
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new App().setVisible(true);
+        });
+    }
 }
