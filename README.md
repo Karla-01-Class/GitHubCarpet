@@ -219,8 +219,7 @@
 - P138_ArchivoMaterias
 - P139_ArchivoEstudiante
 
-## ACTIVIDAD 24
-
+## ACTIVIDAD 24 P1
 - P140_HolaMundoGUI
 - P141_AreaTrianguloGUI
 - P142_LeyDeNewtonGUI
@@ -228,3 +227,6 @@
 ## PRACTICA 15
 - P143_PagaTrabjador
 - P144_Temperaturas
+
+## ACTIVIDAD 24 P2
+- P145_EstudianteGUI_V1
