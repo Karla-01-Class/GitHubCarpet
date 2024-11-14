@@ -230,3 +230,6 @@
 
 ## ACTIVIDAD 24 P2
 - P145_EstudianteGUI_V1
+
+## ACTIVIDAD 24 P3
+- p146_HolaMundoGUI_V2
