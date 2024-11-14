@@ -19,7 +19,7 @@ public class App extends JFrame {
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Panel de la tabla
+
         modeloTabla = new DefaultTableModel(new Object[]{"Nombre", "Edad", "Sexo", "Estado Civil", "Descripción", "Salario"}, 0);
         tablaJugadores = new JTable(modeloTabla);
         tablaJugadores.addMouseListener(new MouseAdapter() {
@@ -30,7 +30,6 @@ public class App extends JFrame {
         });
         JScrollPane scrollPane = new JScrollPane(tablaJugadores);
         
-        // Panel de datos
         JPanel panelDatos = new JPanel(new GridLayout(6, 2));
         panelDatos.add(new JLabel("Nombre:"));
         txtNombre = new JTextField();
@@ -56,7 +55,6 @@ public class App extends JFrame {
         txtSalario = new JTextField();
         panelDatos.add(txtSalario);
 
-        // Panel de botones
         JPanel panelBotones = new JPanel();
         JButton btnAgregar = new JButton("Agregar");
         btnAgregar.addActionListener(e -> agregarJugador());
@@ -65,7 +63,6 @@ public class App extends JFrame {
         panelBotones.add(btnAgregar);
         panelBotones.add(btnGuardar);
 
-        // Barra de menús
         JMenuBar menuBar = new JMenuBar();
         JMenu menuArchivo = new JMenu("Archivo");
         JMenuItem itemAbrir = new JMenuItem("Abrir");
@@ -87,7 +84,6 @@ public class App extends JFrame {
         menuBar.add(menuAyuda);
         setJMenuBar(menuBar);
 
-        // Layout principal
         setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
         add(panelDatos, BorderLayout.NORTH);
@@ -128,7 +124,6 @@ public class App extends JFrame {
         modeloTabla.addRow(new Object[]{jugador.getNombre(), jugador.getEdad(), jugador.getSexo(),
                 jugador.getEstadoCivil(), jugador.getDescripcion(), jugador.getSalario()});
 
-        // Limpiar los campos de texto
         limpiarCampos();
     }
 

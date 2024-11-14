@@ -11,7 +11,7 @@ public class Jugador implements Serializable {
     private double salario;
 
     public Jugador() {}
-
+    //datos que luego se mostraran en la app
     public Jugador(String nombre, int edad, char sexo, String estadoCivil, String descripcion, double salario) {
         this.nombre = nombre;
         this.edad = edad;
