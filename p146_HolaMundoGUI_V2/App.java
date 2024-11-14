@@ -1,4 +1,4 @@
-//package p146_HolaMundoGUI_V2;
+package p146_HolaMundoGUI_V2;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
