@@ -1,5 +1,6 @@
 package P136_Archivos5;
 
+
 import java.io.Serializable;
 
 public class Persona implements Serializable {

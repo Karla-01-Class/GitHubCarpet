@@ -23,7 +23,6 @@ public class P135_Archivos4 {
             fdatos.close();
         }
      }   
-    
      public static ArrayList<String> LeerDatos(String archivo) throws IOException{
         ArrayList<String> datos = new ArrayList<>();
         BufferedReader fdatos = new BufferedReader(new FileReader(new File(archivo)));

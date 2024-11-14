@@ -1,5 +1,4 @@
 import java.io.File;
-
 public class P132_Archivos1 {
     
     public static void main(String[] args) {

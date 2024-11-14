@@ -26,5 +26,4 @@ public class P133_Archivos2 {
             System.out.println("El archivo ya existe..");
         }
     }
-    
 }
