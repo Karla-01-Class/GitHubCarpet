@@ -212,4 +212,15 @@
 - P133_Archivos2
 - P134_Archivos3
 - P135_Archivos4
-- P136_Archivos5
+- 
+
+## PRACTICA 14
+- P137_ArchivoMunicipios
+- P138_ArchivoMaterias
+- P139_ArchivoEstudiante
+
+## ACTIVIDAD 24
+
+- P140_HolaMundoGUI
+- P141_AreaTrianguloGUI
+- P142_LeyDeNewtonGUI
